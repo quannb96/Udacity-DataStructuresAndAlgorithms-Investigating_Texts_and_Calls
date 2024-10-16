@@ -84,7 +84,8 @@ for call in calls:
 
 # Sort and print the area codes
 sorted_area_codes = sorted(area_codes)
-print("The numbers called by people in Bangalore have codes: " + ", ".join(sorted_area_codes) + ",")
+print("The numbers called by people in Bangalore have codes: ")
+print(*sorted_area_codes, sep="\n")
 
 # Calculate and print the percentage of calls from Bangalore to Bangalore
 if total_calls_from_bangalore > 0:

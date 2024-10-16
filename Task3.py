@@ -2,6 +2,7 @@
 Read file into texts and calls.
 It's ok if you don't understand how to read files.
 """
+# Udacity code init - start >>>
 import csv
 
 with open('texts.csv', 'r') as f:
@@ -44,3 +45,51 @@ Print the answer as a part of a message::
 to other fixed lines in Bangalore."
 The percentage should have 2 decimal digits
 """
+# <<< Udacity code init - end
+
+# <<< My code - start >>>
+# All area codes and mobile prefixes called in Bangalore
+area_codes = set()
+
+# Count the total calls from Bangalore and the calls from Bangalore to Bangalore
+total_calls_from_bangalore = 0
+calls_within_bangalore = 0
+
+# Define variables for Bangalore area code and telemarketer prefix
+bangalore_area_code = "(080)"
+telemarketer_prefix = "140"
+# Define a variable for mobile number prefixes
+mobile_prefixes = ['7', '8', '9']
+
+for call in calls:
+    calling, receiving = call[0], call[1]
+
+    # The call is made from Bangalore "(080)"
+    if calling.startswith(bangalore_area_code):
+        total_calls_from_bangalore += 1
+
+        # Add the area code for the receiving number
+        if receiving.startswith("("):  # Fixed line
+            end_index = receiving.find(")")
+            areaCode = receiving[1:end_index]
+            area_codes.add(areaCode)
+        elif " " in receiving and receiving[0] in mobile_prefixes:  # Mobile number
+            area_codes.add(receiving[:4])
+        elif receiving.startswith(telemarketer_prefix):  # Telemarketer
+            area_codes.add(telemarketer_prefix)
+
+        # Check if the receiving number is also from Bangalore
+        if receiving.startswith(bangalore_area_code):
+            calls_within_bangalore += 1
+
+# Sort and print the area codes
+sorted_area_codes = sorted(area_codes)
+print("The numbers called by people in Bangalore have codes: " + ", ".join(sorted_area_codes) + ",")
+
+# Calculate and print the percentage of calls from Bangalore to Bangalore
+if total_calls_from_bangalore > 0:
+    percentage = (calls_within_bangalore / total_calls_from_bangalore) * 100
+else:
+    percentage = 0
+
+print(f"{percentage:.2f} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")
